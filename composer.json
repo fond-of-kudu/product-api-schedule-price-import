@@ -1,0 +1,41 @@
+{
+  "name": "fond-of-kudu/product-api-schedule-price-import",
+  "description": "",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pascal Fischer",
+      "email": "p-fischer@gmx.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "spryker/product": "^6.0.0",
+    "spryker/product-extension": "^1.5.0",
+    "spryker/price-product-schedule": "^2.7.0"
+  },
+  "require-dev": {
+    "fond-of-codeception/spryker": "*",
+    "spryker/code-sniffer": "*",
+    "spryker-sdk/phpstan-spryker": "*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "FondOfKudu\\": "src/FondOfKudu/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "FondOfKudu\\": "tests/FondOfKudu/",
+      "Generated\\": "src/Generated/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}
