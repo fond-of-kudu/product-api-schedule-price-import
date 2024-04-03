@@ -7,7 +7,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Spryker\Zed\Product\Dependency\Plugin\ProductAbstractPluginUpdateInterface;
 
 /**
- * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\ProductApiSchedulePriceImportBusinessFacadeInterface getFacade()
+ * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\ProductApiSchedulePriceImportFacadeInterface getFacade()
  * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\ProductApiSchedulePriceImportConfig getConfig()
  */
 class SalePriceProductAbstractUpdatePlugin extends AbstractPlugin implements ProductAbstractPluginUpdateInterface
@@ -19,6 +19,6 @@ class SalePriceProductAbstractUpdatePlugin extends AbstractPlugin implements Pro
      */
     public function update(ProductAbstractTransfer $productAbstractTransfer): ProductAbstractTransfer
     {
-        return $this->getFacade()->persistProductAbstractSalePrice($productAbstractTransfer);
+        return $this->getFacade()->updatePriceProductAbstractSchedule($productAbstractTransfer);
     }
 }

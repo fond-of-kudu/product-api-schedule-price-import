@@ -8,6 +8,7 @@
         <property name="isActive" type="bool"/>
         <property name="storeRelation" type="StoreRelation"/>
         <property name="searchMetadata" type="array" singular="searchMetadata" associative="true"/>
+        <property name="prices" type="PriceProduct[]" singular="price"/>
     </transfer>
 
     <transfer name="ProductConcrete">
@@ -23,4 +24,36 @@
         <property name="url" type="ProductUrl"/>
         <property name="searchMetadata" type="array" singular="searchMetadata" associative="true"/>
     </transfer>
+
+    <transfer name="PriceProduct">
+        <property name="moneyValue" type="MoneyValue"/>
+        <property name="priceType" type="PriceType"/>
+    </transfer>
+
+    <transfer name="PriceProductScheduleList">
+        <property name="idPriceProductScheduleList" type="int"/>
+    </transfer>
+
+    <transfer name="MoneyValue">
+        <property name="currency" type="Currency"/>
+        <property name="grossAmount" type="int"/>
+    </transfer>
+
+    <transfer name="PriceProductSchedule">
+        <property name="priceProductScheduleList" type="PriceProductScheduleList"/>
+        <property name="activeFrom" type="string"/>
+        <property name="activeTo" type="string"/>
+        <property name="priceProduct" type="PriceProduct"/>
+        <property name="store" type="Store"/>
+        <property name="currency" type="Currency"/>
+    </transfer>
+
+    <transfer name="StoreRelation">
+        <property name="stores" type="Store[]" singular="stores"/>
+    </transfer>
+
+    <transfer name="Currency"/>
+    <transfer name="Store"/>
+    <transfer name="PriceProductScheduleResponse"/>
+    <transfer name="PriceType"/>
 </transfers>

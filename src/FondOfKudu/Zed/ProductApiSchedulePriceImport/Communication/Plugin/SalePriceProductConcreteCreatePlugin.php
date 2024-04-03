@@ -7,7 +7,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 use Spryker\Zed\ProductExtension\Dependency\Plugin\ProductConcreteCreatePluginInterface;
 
 /**
- * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\ProductApiSchedulePriceImportBusinessFacadeInterface getFacade()
+ * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\ProductApiSchedulePriceImportFacadeInterface getFacade()
  * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\ProductApiSchedulePriceImportConfig getConfig()
  */
 class SalePriceProductConcreteCreatePlugin extends AbstractPlugin implements ProductConcreteCreatePluginInterface
@@ -19,6 +19,6 @@ class SalePriceProductConcreteCreatePlugin extends AbstractPlugin implements Pro
      */
     public function create(ProductConcreteTransfer $productConcreteTransfer): ProductConcreteTransfer
     {
-        return $this->getFacade()->persistProductConcreteSalePrice($productConcreteTransfer);
+        return $this->getFacade()->createPriceProductConcreteSchedule($productConcreteTransfer);
     }
 }
