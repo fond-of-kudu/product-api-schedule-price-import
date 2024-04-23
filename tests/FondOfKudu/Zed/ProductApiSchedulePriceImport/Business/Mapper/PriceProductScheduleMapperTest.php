@@ -109,7 +109,7 @@ class PriceProductScheduleMapperTest extends Unit
     /**
      * @return void
      */
-    public function testCreateFromProductAbstractTransferCreateNewEntry(): void
+    public function testCreateFromProductAbstractTransfer(): void
     {
         $this->productAbstractTransferMock->expects(static::atLeastOnce())
             ->method('getIdProductAbstract')
@@ -177,7 +177,7 @@ class PriceProductScheduleMapperTest extends Unit
     /**
      * @return void
      */
-    public function testCreateFromProductConcreteTransferCreateNewEntry(): void
+    public function testCreateFromProductConcreteTransfer(): void
     {
         $this->productConcreteTransferMock->expects(static::atLeastOnce())
             ->method('getIdProductConcrete')

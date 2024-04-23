@@ -36,8 +36,11 @@
     </transfer>
 
     <transfer name="MoneyValue">
+        <property name="fkStore" type="int"/>
+        <property name="fkCurrency" type="int"/>
         <property name="currency" type="Currency"/>
         <property name="grossAmount" type="int"/>
+        <property name="store" type="Store"/>
     </transfer>
 
     <transfer name="PriceProductSchedule">
@@ -53,8 +56,15 @@
         <property name="stores" type="Store[]" singular="stores"/>
     </transfer>
 
-    <transfer name="Currency"/>
-    <transfer name="Store"/>
+    <transfer name="Currency">
+        <property name="idCurrency" type="int"/>
+        <property name="code" type="string"/>
+    </transfer>
+
+    <transfer name="Store">
+        <property name="idStore" type="int"/>
+    </transfer>
+
     <transfer name="PriceProductScheduleResponse"/>
     <transfer name="PriceType"/>
 </transfers>
