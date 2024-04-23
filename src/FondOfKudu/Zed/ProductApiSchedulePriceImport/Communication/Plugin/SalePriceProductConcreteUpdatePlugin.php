@@ -19,6 +19,6 @@ class SalePriceProductConcreteUpdatePlugin extends AbstractPlugin implements Pro
      */
     public function update(ProductConcreteTransfer $productConcreteTransfer): ProductConcreteTransfer
     {
-        return $this->getFacade()->updatePriceProductConcreteSchedule($productConcreteTransfer);
+        return $this->getFacade()->onUpdateProductConcrete($productConcreteTransfer);
     }
 }

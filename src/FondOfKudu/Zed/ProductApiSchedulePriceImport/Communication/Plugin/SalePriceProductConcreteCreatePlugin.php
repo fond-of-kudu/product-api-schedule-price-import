@@ -19,6 +19,6 @@ class SalePriceProductConcreteCreatePlugin extends AbstractPlugin implements Pro
      */
     public function create(ProductConcreteTransfer $productConcreteTransfer): ProductConcreteTransfer
     {
-        return $this->getFacade()->createPriceProductConcreteSchedule($productConcreteTransfer);
+        return $this->getFacade()->onCreateProductConcrete($productConcreteTransfer);
     }
 }

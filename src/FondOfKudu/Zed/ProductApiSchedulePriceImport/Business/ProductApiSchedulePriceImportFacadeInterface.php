@@ -12,7 +12,7 @@ interface ProductApiSchedulePriceImportFacadeInterface
      *
      * @return \Generated\Shared\Transfer\ProductAbstractTransfer
      */
-    public function createPriceProductAbstractSchedule(
+    public function onCreateProductAbstract(
         ProductAbstractTransfer $productAbstractTransfer
     ): ProductAbstractTransfer;
 
@@ -21,7 +21,7 @@ interface ProductApiSchedulePriceImportFacadeInterface
      *
      * @return \Generated\Shared\Transfer\ProductAbstractTransfer
      */
-    public function updatePriceProductAbstractSchedule(
+    public function onUpdateProductAbstract(
         ProductAbstractTransfer $productAbstractTransfer
     ): ProductAbstractTransfer;
 
@@ -30,7 +30,7 @@ interface ProductApiSchedulePriceImportFacadeInterface
      *
      * @return \Generated\Shared\Transfer\ProductConcreteTransfer
      */
-    public function createPriceProductConcreteSchedule(
+    public function onCreateProductConcrete(
         ProductConcreteTransfer $productConcreteTransfer
     ): ProductConcreteTransfer;
 
@@ -39,7 +39,7 @@ interface ProductApiSchedulePriceImportFacadeInterface
      *
      * @return \Generated\Shared\Transfer\ProductConcreteTransfer
      */
-    public function updatePriceProductConcreteSchedule(
+    public function onUpdateProductConcrete(
         ProductConcreteTransfer $productConcreteTransfer
     ): ProductConcreteTransfer;
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model;
+namespace FondOfKudu\Zed\ProductApiSchedulePriceImport\Persistence\Mapper;
 
 use Codeception\Test\Unit;
 
-class SalePriceProductAbstractCreatorTest extends Unit
+class PriceProductScheduleListMapperTest extends Unit
 {
     /**
      * @return void

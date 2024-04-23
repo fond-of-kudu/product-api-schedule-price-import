@@ -9,6 +9,7 @@
         <property name="storeRelation" type="StoreRelation"/>
         <property name="searchMetadata" type="array" singular="searchMetadata" associative="true"/>
         <property name="prices" type="PriceProduct[]" singular="price"/>
+        <property name="ProductConcretes" type="array" singular="productConcrete"/>
     </transfer>
 
     <transfer name="ProductConcrete">

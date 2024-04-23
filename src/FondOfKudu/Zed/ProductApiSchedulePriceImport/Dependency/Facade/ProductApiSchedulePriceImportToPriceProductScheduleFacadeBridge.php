@@ -31,4 +31,25 @@ class ProductApiSchedulePriceImportToPriceProductScheduleFacadeBridge implements
     ): PriceProductScheduleResponseTransfer {
         return $this->priceProductScheduleFacade->createAndApplyPriceProductSchedule($priceProductScheduleTransfer);
     }
+
+    /**
+     * @param \Generated\Shared\Transfer\PriceProductScheduleTransfer $priceProductScheduleTransfer
+     *
+     * @return \Generated\Shared\Transfer\PriceProductScheduleResponseTransfer
+     */
+    public function updateAndApplyPriceProductSchedule(
+        PriceProductScheduleTransfer $priceProductScheduleTransfer
+    ): PriceProductScheduleResponseTransfer {
+        return $this->priceProductScheduleFacade->updateAndApplyPriceProductSchedule($priceProductScheduleTransfer);
+    }
+
+    /**
+     * @param int $idPriceProductSchedule
+     *
+     * @return void
+     */
+    public function removeAndApplyPriceProductSchedule(int $idPriceProductSchedule): void
+    {
+        $this->priceProductScheduleFacade->removeAndApplyPriceProductSchedule($idPriceProductSchedule);
+    }
 }

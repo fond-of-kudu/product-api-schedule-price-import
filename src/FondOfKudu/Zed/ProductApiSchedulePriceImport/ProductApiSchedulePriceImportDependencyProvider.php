@@ -2,10 +2,15 @@
 
 namespace FondOfKudu\Zed\ProductApiSchedulePriceImport;
 
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToCurrencyFacadeBridge;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToCurrencyFacadeInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductFacadeBridge;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductFacadeInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductScheduleFacadeBridge;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductScheduleFacadeInterface;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToStoreFacadeBridge;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToStoreFacadeInterface;
+use Orm\Zed\PriceProductSchedule\Persistence\SpyPriceProductScheduleQuery;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
@@ -25,6 +30,21 @@ class ProductApiSchedulePriceImportDependencyProvider extends AbstractBundleDepe
     public const FACADE_PRICE_PRODUCT = 'FACADE_PRICE_PRODUCT';
 
     /**
+     * @var string
+     */
+    public const FACADE_CURRENCY = 'FACADE_CURRENCY';
+
+    /**
+     * @var string
+     */
+    public const FACADE_STORE = 'FACADE_STORE';
+
+    /**
+     * @var string
+     */
+    public const QUERY_PRICE_PRODUCT_SCHEDULE = 'QUERY_PRICE_PRODUCT_SCHEDULE';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -33,6 +53,8 @@ class ProductApiSchedulePriceImportDependencyProvider extends AbstractBundleDepe
     {
         $container = parent::provideBusinessLayerDependencies($container);
         $container = $this->addPriceProductFacade($container);
+        $container = $this->addCurrencyFacade($container);
+        $container = $this->addStoreFacade($container);
         $container = $this->addPriceProductScheduleFacade($container);
 
         return $container;
@@ -55,7 +77,10 @@ class ProductApiSchedulePriceImportDependencyProvider extends AbstractBundleDepe
      */
     public function providePersistenceLayerDependencies(Container $container): Container
     {
-        return parent::providePersistenceLayerDependencies($container);
+        $container = parent::providePersistenceLayerDependencies($container);
+        $container = $this->addPriceProductScheduleQuery($container);
+
+        return $container;
     }
 
     /**
@@ -86,6 +111,50 @@ class ProductApiSchedulePriceImportDependencyProvider extends AbstractBundleDepe
         ): ProductApiSchedulePriceImportToPriceProductFacadeInterface => new ProductApiSchedulePriceImportToPriceProductFacadeBridge(
             $container->getLocator()->priceProduct()->facade(),
         );
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addCurrencyFacade(Container $container): Container
+    {
+        $container[static::FACADE_CURRENCY] = static fn (
+            Container $container
+        ): ProductApiSchedulePriceImportToCurrencyFacadeInterface => new ProductApiSchedulePriceImportToCurrencyFacadeBridge(
+            $container->getLocator()->currency()->facade(),
+        );
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addStoreFacade(Container $container): Container
+    {
+        $container[static::FACADE_STORE] = static fn (
+            Container $container
+        ): ProductApiSchedulePriceImportToStoreFacadeInterface => new ProductApiSchedulePriceImportToStoreFacadeBridge(
+            $container->getLocator()->store()->facade(),
+        );
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addPriceProductScheduleQuery(Container $container): Container
+    {
+        $container[static::QUERY_PRICE_PRODUCT_SCHEDULE] = SpyPriceProductScheduleQuery::create();
 
         return $container;
     }

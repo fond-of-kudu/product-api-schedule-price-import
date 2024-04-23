@@ -8,6 +8,7 @@ use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
  * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\ProductApiSchedulePriceImportBusinessFactory getFactory()
+ * @method \FondOfKudu\Zed\ProductApiSchedulePriceImport\Persistence\ProductApiSchedulePriceImportRepositoryInterface getRepository()
  */
 class ProductApiSchedulePriceImportFacade extends AbstractFacade implements ProductApiSchedulePriceImportFacadeInterface
 {
@@ -16,12 +17,12 @@ class ProductApiSchedulePriceImportFacade extends AbstractFacade implements Prod
      *
      * @return \Generated\Shared\Transfer\ProductAbstractTransfer
      */
-    public function createPriceProductAbstractSchedule(
+    public function onCreateProductAbstract(
         ProductAbstractTransfer $productAbstractTransfer
     ): ProductAbstractTransfer {
         return $this->getFactory()
-            ->createSalePriceProductAbstractCreator()
-            ->createProductSchedulePriceByProductAbstractTransfer($productAbstractTransfer);
+            ->createSalePriceHandler()
+            ->handleProductAbstract($productAbstractTransfer);
     }
 
     /**
@@ -29,10 +30,12 @@ class ProductApiSchedulePriceImportFacade extends AbstractFacade implements Prod
      *
      * @return \Generated\Shared\Transfer\ProductAbstractTransfer
      */
-    public function updatePriceProductAbstractSchedule(
+    public function onUpdateProductAbstract(
         ProductAbstractTransfer $productAbstractTransfer
     ): ProductAbstractTransfer {
-        return $productAbstractTransfer;
+        return $this->getFactory()
+            ->createSalePriceHandler()
+            ->handleProductAbstract($productAbstractTransfer);
     }
 
     /**
@@ -40,10 +43,12 @@ class ProductApiSchedulePriceImportFacade extends AbstractFacade implements Prod
      *
      * @return \Generated\Shared\Transfer\ProductConcreteTransfer
      */
-    public function createPriceProductConcreteSchedule(
+    public function onCreateProductConcrete(
         ProductConcreteTransfer $productConcreteTransfer
     ): ProductConcreteTransfer {
-        return $productConcreteTransfer;
+        return $this->getFactory()
+            ->createSalePriceHandler()
+            ->handleProductConcrete($productConcreteTransfer);
     }
 
     /**
@@ -51,9 +56,11 @@ class ProductApiSchedulePriceImportFacade extends AbstractFacade implements Prod
      *
      * @return \Generated\Shared\Transfer\ProductConcreteTransfer
      */
-    public function updatePriceProductConcreteSchedule(
+    public function onUpdateProductConcrete(
         ProductConcreteTransfer $productConcreteTransfer
     ): ProductConcreteTransfer {
-        return $productConcreteTransfer;
+        return $this->getFactory()
+            ->createSalePriceHandler()
+            ->handleProductConcrete($productConcreteTransfer);
     }
 }
