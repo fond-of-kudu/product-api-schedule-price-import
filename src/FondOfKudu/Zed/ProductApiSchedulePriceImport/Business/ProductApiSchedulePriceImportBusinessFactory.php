@@ -6,6 +6,8 @@ use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Mapper\PriceProductSch
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Mapper\PriceProductScheduleMapperInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model\SalePriceHandler;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model\SalePriceHandlerInterface;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidator;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidatorInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToCurrencyFacadeInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductFacadeInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductScheduleFacadeInterface;
@@ -29,6 +31,7 @@ class ProductApiSchedulePriceImportBusinessFactory extends AbstractBusinessFacto
             $this->getPriceProductScheduleFacade(),
             $this->getCurrencyFacade(),
             $this->getStoreFacade(),
+            $this->createSpecialPriceAttributesValidator(),
             $this->getRepository(),
             $this->getConfig(),
         );
@@ -45,6 +48,14 @@ class ProductApiSchedulePriceImportBusinessFactory extends AbstractBusinessFacto
             $this->getCurrencyFacade(),
             $this->getStoreFacade(),
         );
+    }
+
+    /**
+     * @return \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidatorInterface
+     */
+    protected function createSpecialPriceAttributesValidator(): SpecialPriceAttributesValidatorInterface
+    {
+        return new SpecialPriceAttributesValidator($this->getConfig());
     }
 
     /**

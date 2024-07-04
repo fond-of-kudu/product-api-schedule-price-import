@@ -5,6 +5,7 @@ namespace FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model;
 use Codeception\Test\Unit;
 use FondOfKudu\Shared\ProductApiSchedulePriceImport\ProductApiSchedulePriceImportConstants;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Mapper\PriceProductScheduleMapper;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidator;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToCurrencyFacadeBridge;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductScheduleFacadeBridge;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToStoreFacadeBridge;
@@ -87,6 +88,11 @@ class SalePriceHandlerTest extends Unit
     protected MockObject|MoneyValueTransfer $moneyValueTransferMock;
 
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidator
+     */
+    protected MockObject|SpecialPriceAttributesValidator $specialPriceAttributesValidator;
+
+    /**
      * @var \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model\SalePriceHandlerInterface
      */
     protected SalePriceHandlerInterface $salePriceHandler;
@@ -109,12 +115,14 @@ class SalePriceHandlerTest extends Unit
         $this->priceProductScheduleTransferMock = $this->createMock(PriceProductScheduleTransfer::class);
         $this->priceProductTransferMock = $this->createMock(PriceProductTransfer::class);
         $this->moneyValueTransferMock = $this->createMock(MoneyValueTransfer::class);
+        $this->specialPriceAttributesValidator = $this->createMock(SpecialPriceAttributesValidator::class);
 
         $this->salePriceHandler = new SalePriceHandler(
             $this->priceProductScheduleMapperMock,
             $this->priceProductScheduleFacadeMock,
             $this->currencyFacadeMock,
             $this->storeFacadeMock,
+            $this->specialPriceAttributesValidator,
             $this->productApiSchedulePriceImportRepositoryMock,
             $this->apiSchedulePriceImportConfigMock,
         );
@@ -133,17 +141,14 @@ class SalePriceHandlerTest extends Unit
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
             ]);
 
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePrice')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceFrom')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceTo')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO);
+        $this->specialPriceAttributesValidator->expects(static::atLeastOnce())
+            ->method('validate')
+            ->with([
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE => null,
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
+            ])
+            ->willReturn(false);
 
         $this->currencyFacadeMock->expects(static::never())
             ->method('getCurrent');
@@ -166,17 +171,14 @@ class SalePriceHandlerTest extends Unit
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
             ]);
 
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePrice')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceFrom')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceTo')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO);
+        $this->specialPriceAttributesValidator->expects(static::atLeastOnce())
+            ->method('validate')
+            ->with([
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE => '2999',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
+            ])
+            ->willReturn(true);
 
         $this->currencyFacadeMock->expects(static::atLeastOnce())
             ->method('getCurrent')
@@ -238,6 +240,15 @@ class SalePriceHandlerTest extends Unit
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
             ]);
+
+        $this->specialPriceAttributesValidator->expects(static::atLeastOnce())
+            ->method('validate')
+            ->with([
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE => '2999',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
+            ])
+            ->willReturn(true);
 
         $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
             ->method('getProductAttributeSalePrice')
@@ -340,17 +351,14 @@ class SalePriceHandlerTest extends Unit
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
             ]);
 
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePrice')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceFrom')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceTo')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO);
+        $this->specialPriceAttributesValidator->expects(static::atLeastOnce())
+            ->method('validate')
+            ->with([
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE => null,
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
+            ])
+            ->willReturn(false);
 
         $this->currencyFacadeMock->expects(static::never())
             ->method('getCurrent');
@@ -373,17 +381,14 @@ class SalePriceHandlerTest extends Unit
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
             ]);
 
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePrice')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceFrom')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM);
-
-        $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
-            ->method('getProductAttributeSalePriceTo')
-            ->willReturn(ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO);
+        $this->specialPriceAttributesValidator->expects(static::atLeastOnce())
+            ->method('validate')
+            ->with([
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE => '2999',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
+            ])
+            ->willReturn(true);
 
         $this->currencyFacadeMock->expects(static::atLeastOnce())
             ->method('getCurrent')
@@ -445,6 +450,15 @@ class SalePriceHandlerTest extends Unit
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
                 ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
             ]);
+
+        $this->specialPriceAttributesValidator->expects(static::atLeastOnce())
+            ->method('validate')
+            ->with([
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE => '2999',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_FROM => '2024-01-01',
+                ProductApiSchedulePriceImportConstants::SPECIAL_PRICE_TO => '2024-12-31',
+            ])
+            ->willReturn(true);
 
         $this->apiSchedulePriceImportConfigMock->expects(static::atLeastOnce())
             ->method('getProductAttributeSalePrice')

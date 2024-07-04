@@ -4,6 +4,7 @@ namespace FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model;
 
 use DateTime;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Mapper\PriceProductScheduleMapperInterface;
+use FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidatorInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToCurrencyFacadeInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductScheduleFacadeInterface;
 use FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToStoreFacadeInterface;
@@ -46,10 +47,16 @@ class SalePriceHandler implements SalePriceHandlerInterface
     protected PriceProductScheduleMapperInterface $priceProductScheduleMapper;
 
     /**
+     * @var \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidatorInterface
+     */
+    protected SpecialPriceAttributesValidatorInterface $specialPriceAttributesValidator;
+
+    /**
      * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Mapper\PriceProductScheduleMapperInterface $priceProductScheduleMapper
      * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToPriceProductScheduleFacadeInterface $priceProductScheduleFacade
      * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToCurrencyFacadeInterface $currencyFacade
      * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\Dependency\Facade\ProductApiSchedulePriceImportToStoreFacadeInterface $storeFacade
+     * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Validator\SpecialPriceAttributesValidatorInterface $specialPriceAttributesValidator
      * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\Persistence\ProductApiSchedulePriceImportRepositoryInterface $productApiSchedulePriceImportRepository
      * @param \FondOfKudu\Zed\ProductApiSchedulePriceImport\ProductApiSchedulePriceImportConfig $apiSchedulePriceImportConfig
      */
@@ -58,6 +65,7 @@ class SalePriceHandler implements SalePriceHandlerInterface
         ProductApiSchedulePriceImportToPriceProductScheduleFacadeInterface $priceProductScheduleFacade,
         ProductApiSchedulePriceImportToCurrencyFacadeInterface $currencyFacade,
         ProductApiSchedulePriceImportToStoreFacadeInterface $storeFacade,
+        SpecialPriceAttributesValidatorInterface $specialPriceAttributesValidator,
         ProductApiSchedulePriceImportRepositoryInterface $productApiSchedulePriceImportRepository,
         ProductApiSchedulePriceImportConfig $apiSchedulePriceImportConfig
     ) {
@@ -67,6 +75,7 @@ class SalePriceHandler implements SalePriceHandlerInterface
         $this->storeFacade = $storeFacade;
         $this->productApiSchedulePriceImportRepository = $productApiSchedulePriceImportRepository;
         $this->apiSchedulePriceImportConfig = $apiSchedulePriceImportConfig;
+        $this->specialPriceAttributesValidator = $specialPriceAttributesValidator;
     }
 
     /**
@@ -76,7 +85,7 @@ class SalePriceHandler implements SalePriceHandlerInterface
      */
     public function handleProductAbstract(ProductAbstractTransfer $productAbstractTransfer): ProductAbstractTransfer
     {
-        if (!$this->validateSpecialPriceAttributes($productAbstractTransfer->getAttributes())) {
+        if (!$this->specialPriceAttributesValidator->validate($productAbstractTransfer->getAttributes())) {
             return $productAbstractTransfer;
         }
 
@@ -112,7 +121,7 @@ class SalePriceHandler implements SalePriceHandlerInterface
      */
     public function handleProductConcrete(ProductConcreteTransfer $productConcreteTransfer): ProductConcreteTransfer
     {
-        if (!$this->validateSpecialPriceAttributes($productConcreteTransfer->getAttributes())) {
+        if (!$this->specialPriceAttributesValidator->validate($productConcreteTransfer->getAttributes())) {
             return $productConcreteTransfer;
         }
 
@@ -178,31 +187,5 @@ class SalePriceHandler implements SalePriceHandlerInterface
         }
 
         return false;
-    }
-
-    /**
-     * @param array $productAttributes
-     *
-     * @return bool
-     */
-    protected function validateSpecialPriceAttributes(array $productAttributes): bool
-    {
-        $required = [
-            $this->apiSchedulePriceImportConfig->getProductAttributeSalePrice(),
-            $this->apiSchedulePriceImportConfig->getProductAttributeSalePriceFrom(),
-            $this->apiSchedulePriceImportConfig->getProductAttributeSalePriceTo(),
-        ];
-
-        foreach ($required as $attribute) {
-            if (!isset($productAttributes[$attribute])) {
-                return false;
-            }
-
-            if (!$productAttributes[$attribute]) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
