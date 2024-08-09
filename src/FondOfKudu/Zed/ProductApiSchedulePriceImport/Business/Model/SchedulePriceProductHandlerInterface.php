@@ -5,7 +5,7 @@ namespace FondOfKudu\Zed\ProductApiSchedulePriceImport\Business\Model;
 use Generated\Shared\Transfer\ProductAbstractTransfer;
 use Generated\Shared\Transfer\ProductConcreteTransfer;
 
-interface SalePriceHandlerInterface
+interface SchedulePriceProductHandlerInterface
 {
     /**
      * @param \Generated\Shared\Transfer\ProductAbstractTransfer $productAbstractTransfer
