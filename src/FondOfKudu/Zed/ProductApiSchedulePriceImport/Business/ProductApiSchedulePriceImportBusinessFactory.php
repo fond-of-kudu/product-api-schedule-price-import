@@ -31,6 +31,7 @@ class ProductApiSchedulePriceImportBusinessFactory extends AbstractBusinessFacto
     public function createSchedulePriceProductHandler(): SchedulePriceProductHandlerInterface
     {
         return new SchedulePriceProductHandler(
+            $this->getPriceProductScheduleFacade(),
             $this->createSchedulePriceProductAbstractModel(),
             $this->createSchedulePriceProductConcreteModel(),
             $this->createSpecialPriceAttributesValidator(),

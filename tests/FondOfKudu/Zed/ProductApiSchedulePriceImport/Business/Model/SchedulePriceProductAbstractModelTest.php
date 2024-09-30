@@ -111,27 +111,15 @@ class SchedulePriceProductAbstractModelTest extends Unit
      */
     public function testUpdate(): void
     {
-        $this->priceProductScheduleTransferMock->expects(static::atLeastOnce())
-            ->method('getIdPriceProductSchedule')
-            ->willReturn(1);
-
-        $this->priceProductScheduleFacadeMock->expects(static::atLeastOnce())
-            ->method('removeAndApplyPriceProductSchedule')
-            ->with($this->priceProductScheduleTransferMock->getIdPriceProductSchedule());
-
         $this->priceProductScheduleMapperMock->expects(static::atLeastOnce())
             ->method('createFromProductAbstractTransfer')
-            ->with($this->productAbstractTransferMock)
             ->willReturn($this->priceProductScheduleTransferMock);
 
         $this->priceProductScheduleFacadeMock->expects(static::atLeastOnce())
             ->method('createAndApplyPriceProductSchedule')
             ->with($this->priceProductScheduleTransferMock);
 
-        $this->schedulePriceProductAbstractModel->update(
-            $this->productAbstractTransferMock,
-            $this->priceProductScheduleTransferMock,
-        );
+        $this->schedulePriceProductAbstractModel->create($this->productAbstractTransferMock);
     }
 
     /**

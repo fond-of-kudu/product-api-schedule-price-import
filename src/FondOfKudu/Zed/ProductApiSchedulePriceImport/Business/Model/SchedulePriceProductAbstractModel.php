@@ -73,18 +73,11 @@ class SchedulePriceProductAbstractModel implements SchedulePriceProductAbstractM
 
     /**
      * @param \Generated\Shared\Transfer\ProductAbstractTransfer $productAbstractTransfer
-     * @param \Generated\Shared\Transfer\PriceProductScheduleTransfer $priceProductScheduleTransfer
      *
      * @return void
      */
-    public function update(
-        ProductAbstractTransfer $productAbstractTransfer,
-        PriceProductScheduleTransfer $priceProductScheduleTransfer
-    ): void {
-        $this->priceProductScheduleFacade->removeAndApplyPriceProductSchedule(
-            $priceProductScheduleTransfer->getIdPriceProductSchedule(),
-        );
-
+    public function update(ProductAbstractTransfer $productAbstractTransfer): void
+    {
         $priceProductScheduleTransfer = $this->priceProductScheduleMapper
             ->createFromProductAbstractTransfer($productAbstractTransfer);
 

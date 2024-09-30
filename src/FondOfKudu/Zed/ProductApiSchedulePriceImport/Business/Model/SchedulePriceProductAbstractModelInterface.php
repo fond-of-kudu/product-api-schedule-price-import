@@ -16,14 +16,10 @@ interface SchedulePriceProductAbstractModelInterface
 
     /**
      * @param \Generated\Shared\Transfer\ProductAbstractTransfer $productAbstractTransfer
-     * @param \Generated\Shared\Transfer\PriceProductScheduleTransfer $priceProductScheduleTransfer
      *
      * @return void
      */
-    public function update(
-        ProductAbstractTransfer $productAbstractTransfer,
-        PriceProductScheduleTransfer $priceProductScheduleTransfer
-    ): void;
+    public function update(ProductAbstractTransfer $productAbstractTransfer): void;
 
     /**
      * @param int $idProductAbstract
